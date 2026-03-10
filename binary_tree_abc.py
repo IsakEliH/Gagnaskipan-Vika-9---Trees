@@ -119,6 +119,7 @@ class BinaryTree(ABC):
         """
         pass
 
+    @abstractmethod
     def get_at(self, pos: Position) -> object:
         """
         Returns the element at given position.
