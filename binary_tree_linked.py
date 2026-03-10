@@ -31,7 +31,7 @@ class BinaryTreeLinked(BinaryTree):
     ##############################################################################
 
     def __init__(self):
-        self._root = None
+        self._root: BinaryTreeLinked._Node | None = None
 
     def __str__(self):
         return self._representation(self._root)
@@ -59,16 +59,16 @@ class BinaryTreeLinked(BinaryTree):
         return Position(new)
 
     def remove_subtree(self, pos: Position):
-        curr: BinaryTreeLinked._Node = pos.handle
 
-        print(curr, curr.left, curr.right)
+        l_child = self.left_child(pos)
+        r_child = self.right_child(pos)
 
-        if curr.left is not None:
-            return self.remove_subtree(Position(curr.left))
-        elif curr.right is not None:
-            return self.remove_subtree(Position(curr.right))
+        if l_child is not None:
+            self.remove_subtree(l_child)
+        if r_child is not None:
+            self.remove_subtree(r_child)
 
-        return
+        self.remove(pos)
 
     def remove(self, pos: Position):
         self._validate_pos(pos)
@@ -78,13 +78,13 @@ class BinaryTreeLinked(BinaryTree):
         curr: BinaryTreeLinked._Node = pos.handle
 
         par = curr.parent
-        print(type(par))
+        if par is None:
+            return
 
         if par.left == curr:
             par.left = None
         elif par.right == curr:
             par.right = None
-
 
     def replace(self, pos: Position, element: object) -> object:
         # To do
@@ -112,8 +112,6 @@ class BinaryTreeLinked(BinaryTree):
     def right_child(self, pos: Position) -> Position | None:
         self._validate_pos(pos)
         curr: BinaryTreeLinked._Node = pos.handle
-        print(curr)
-        print(curr.right)
         node = curr.right
         return Position(node) if node is not None else None
 
@@ -145,15 +143,15 @@ def call():
 
     r_pos = BTL.add_right_child(pos, 4)
     print(BTL)
-    r_pos = BTL.add_right_child(r_pos, 4)
+    rr_pos = BTL.add_right_child(r_pos, 3)
     print(BTL)
-    r_pos = BTL.add_right_child(r_pos, 4)
+    rrr_pos = BTL.add_right_child(rr_pos, 2)
     print(BTL)
 
-    if r_pos is None:
+    if rrr_pos is None:
         return
 
-    BTL.remove(r_pos)
+    BTL.remove_subtree(rr_pos)
     print(BTL)
 
 
