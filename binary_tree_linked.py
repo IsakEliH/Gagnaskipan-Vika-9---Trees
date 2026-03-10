@@ -95,8 +95,7 @@ class BinaryTreeLinked(BinaryTree):
         return r_obj
 
     def is_empty(self) -> bool:
-        # To do
-        ...
+        return self.root() is None
 
     def root(self) -> Position | None:
         return Position(self._root) if self._root is not None else None
@@ -138,6 +137,7 @@ class BinaryTreeLinked(BinaryTree):
 def call():
 
     BTL = BinaryTreeLinked()
+    print(BTL.is_empty())
     pos = BTL.add_root(5)
 
     print(BTL)
@@ -157,6 +157,8 @@ def call():
 
     BTL.replace(rr_pos, 99)
     print(BTL)
+    print(BTL.is_empty())
+
 
 
 call()
