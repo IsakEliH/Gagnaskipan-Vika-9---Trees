@@ -48,8 +48,16 @@ def pre_order(tree: BinaryTree, pos: Position, elems: list[object]):
     """
     if pos is None:
         return
-    # To do ...
-    ...
+
+    elems.append(pos.handle.element)
+
+    l_child = tree.left_child(pos)
+    r_child = tree.right_child(pos)
+
+    if l_child is not None:
+        pre_order(tree, l_child, elems)
+    if r_child is not None:
+        pre_order(tree, r_child, elems)
 
 
 def post_order(tree: BinaryTree, pos: Position, elems: list[object]):
