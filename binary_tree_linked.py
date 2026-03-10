@@ -87,8 +87,12 @@ class BinaryTreeLinked(BinaryTree):
             par.right = None
 
     def replace(self, pos: Position, element: object) -> object:
-        # To do
-        ...
+        curr: BinaryTreeLinked._Node = pos.handle
+
+        r_obj = curr.element
+
+        curr.element = element
+        return r_obj
 
     def is_empty(self) -> bool:
         # To do
@@ -151,7 +155,7 @@ def call():
     if rrr_pos is None:
         return
 
-    BTL.remove_subtree(rr_pos)
+    BTL.replace(rr_pos, 99)
     print(BTL)
 
 
