@@ -132,33 +132,3 @@ class BinaryTreeLinked(BinaryTree):
         self._validate_pos(pos)
         curr: BinaryTreeLinked._Node = pos.handle
         return curr.element
-
-
-def call():
-
-    BTL = BinaryTreeLinked()
-    print(BTL.is_empty())
-    pos = BTL.add_root(5)
-
-    print(BTL)
-
-    if pos is None:
-        return
-
-    r_pos = BTL.add_right_child(pos, 4)
-    print(BTL)
-    rr_pos = BTL.add_right_child(r_pos, 3)
-    print(BTL)
-    rrr_pos = BTL.add_right_child(rr_pos, 2)
-    print(BTL)
-
-    if rrr_pos is None:
-        return
-
-    BTL.replace(rr_pos, 99)
-    print(BTL)
-    print(BTL.is_empty())
-
-
-
-call()
