@@ -1,13 +1,15 @@
 #
 # BST - Trees (Binary Search Trees)
 # Your name:
-#  - ???
+#  - Ísak Elí Hauksson
 #
 from interface.binary_search_tree_abc import IBinarySearchTree
+
 
 class Position:
     def __init__(self, handle):
         self.handle = handle
+
 
 class Pair:
     def __init__(self, key: object, value: object = None):
@@ -21,7 +23,7 @@ class Pair:
         if self.value is None:
             s = str(self.key)
         else:
-            s = '{' + str(self.key) + ', ' + str(self.value) + '}'
+            s = "{" + str(self.key) + ", " + str(self.value) + "}"
         return s
 
 
@@ -44,6 +46,7 @@ class BinarySearchTree(IBinarySearchTree):
         """
         The node class for creating the nodes in the tree (Do not change!).
         """
+
         def __init__(self, parent, left, right, pair: Pair):
             self.parent = parent
             self.left = left
@@ -53,9 +56,9 @@ class BinarySearchTree(IBinarySearchTree):
     def _representation(self, node: _Node) -> str:
         if node is None:
             return "-"
-        l = self._representation(node.left)
-        r = self._representation(node.right)
-        return '(' + str(node.pair) + ' ' + l + ' ' + r + ')'
+        left = self._representation(node.left)
+        right = self._representation(node.right)
+        return "(" + str(node.pair) + " " + left + " " + right + ")"
 
     # The __iter__ and __reversed__ will be used to test the _first/_last/_before/_after methods.
     def __iter__(self):
@@ -74,22 +77,56 @@ class BinarySearchTree(IBinarySearchTree):
         """
         In a non-empty tree, returns the minimum key node (first in an inorder traversal), otherwise None.
         """
-        # TO DO ...
-        return None
+
+        curr = self._root
+
+        while curr is not None:
+            curr = curr.left
+
+        return curr
 
     def _last(self) -> _Node | None:
         """
         In a non-empty tree, returns the maximum key node (last in an inorder traversal), otherwise None.
         """
-        # TO DO ...
-        return None
+        curr = self._root
+
+        while curr is not None:
+            curr = curr.right
+
+        return curr
 
     def _before(self, node: _Node) -> _Node | None:
         """
         Returns the in-order predecessor of node, or None if it does not exist.
         """
-        # TO DO ...
-        return None
+        if node == self._first() or node is None:
+            return None
+
+        if self._root is None:
+            return None
+        else:
+            curr: BinarySearchTree._Node = self._root
+
+        pred = None
+
+        while curr.pair.key == node.pair.key:
+            if curr.pair.key > node.pair.key:
+                pred = curr
+                curr = curr.right
+
+            if curr.pair.key < node.pair.key:
+                curr = curr.left
+
+        if curr.left is not None:
+            curr = curr.left
+            while curr is not None:
+                curr = curr.right
+            pred = curr
+        else:
+            pred = curr.parent
+
+        return pred
 
     def _after(self, node: _Node) -> _Node | None:
         """
@@ -104,7 +141,7 @@ class BinarySearchTree(IBinarySearchTree):
 
     def __init__(self):
         # This is the only member variable you need. Do not change the constructor.
-        self._root = None
+        self._root: None | BinarySearchTree._Node = None
 
     def __str__(self) -> str:
         """
@@ -112,7 +149,9 @@ class BinarySearchTree(IBinarySearchTree):
         """
         return self._representation(self._root)
 
-    def insert_key(self, key: object) -> bool:  # Method is non-essential, but added for testing convenience.
+    def insert_key(
+        self, key: object
+    ) -> bool:  # Method is non-essential, but added for testing convenience.
         """
         Insert (key, None) element at the appropriate location in the tree if key does not already exist;
         if the key already exists in the tree, then override with the new (key, None) pair.
@@ -120,41 +159,78 @@ class BinarySearchTree(IBinarySearchTree):
         """
         return self.insert(Pair(key, None))
 
-    def keys(self) -> list[object]: # Method is non-essential, but added for testing convenience.
+    def keys(
+        self,
+    ) -> list[object]:  # Method is non-essential, but added for testing convenience.
         """
         Returns a list of all the keys in the tree, in an increasing order.
         """
         return [key for key, _ in self.pairs()]
 
+    def _move_to_key(self, node: _Node, key: object) -> _Node:
+
+        if node.left is None and (key < node.pair.key):
+            return node
+        if node.right is None and (key > node.pair.key):
+            return node
+
+        if key < node.pair.key:
+            node = self._move_to_key(node.left, key)
+        if key > node.pair.key:
+            node = self._move_to_key(node.right, key)
+
+        return node
+
     def insert(self, pair: Pair) -> bool:
         """
         Insert (key, value) element at the appropriate location in the tree if key does not already exist;
         if the key already exists in the tree, then override with the new (key, value) pair.
-        Returns True is a new element was inserted, otherwise False (was updated).
+        Returns True if a new element was inserted, otherwise False (was updated).
         """
-        # TO DO ...
+        if self._root is None:
+            self._root = self._Node(None, None, None, pair)
+            return True
+        curr = self._root
+
+        node: BinarySearchTree._Node = self._move_to_key(curr, pair.key)
+
+        if pair.key < node.pair.key:
+            node.left = self._Node(node, None, None, pair)
+            return True
+        if pair.key > node.pair.key:
+            node.right = self._Node(node, None, None, pair)
+            return True
+
         return False
 
     def is_empty(self) -> bool:
         """
         Returns True if the tree is empty, False otherwise.
         """
-        # TO DO ...
-        return True
+        return self._root is None
 
     def is_in(self, key: object) -> bool:
         """
         Returns True if an element with key is in the tree, otherwise False.
         """
-        # TO DO ...
+        if self._root is None:
+            return False
+
+        if self._move_to_key(self._root, key).pair.key == key:
+            return True
         return False
 
     def get(self, key: object) -> object:
         """
         Returns the value of the element with the given key, or None if the key does not exist.
         """
-        # TO DO ...
-        return None
+        if not self.is_in(key):
+            return None
+
+        if self._root is None:
+            return None
+
+        return self._move_to_key(self._root, key).pair.value
 
     def pairs(self) -> list[Pair]:
         """
