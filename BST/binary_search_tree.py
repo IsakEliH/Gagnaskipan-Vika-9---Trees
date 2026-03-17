@@ -79,8 +79,10 @@ class BinarySearchTree(IBinarySearchTree):
         """
 
         curr = self._root
+        if curr is None:
+            return None
 
-        while curr is not None:
+        while curr.left is not None:
             curr = curr.left
 
         return curr
@@ -90,8 +92,10 @@ class BinarySearchTree(IBinarySearchTree):
         In a non-empty tree, returns the maximum key node (last in an inorder traversal), otherwise None.
         """
         curr = self._root
+        if curr is None:
+            return None
 
-        while curr is not None:
+        while curr.right is not None:
             curr = curr.right
 
         return curr
@@ -103,28 +107,13 @@ class BinarySearchTree(IBinarySearchTree):
         if node == self._first() or node is None:
             return None
 
-        if self._root is None:
-            return None
-        else:
-            curr: BinarySearchTree._Node = self._root
+        pred = node.parent
 
-        pred = None
-
-        while curr.pair.key == node.pair.key:
-            if curr.pair.key > node.pair.key:
-                pred = curr
-                curr = curr.right
-
-            if curr.pair.key < node.pair.key:
-                curr = curr.left
-
-        if curr.left is not None:
-            curr = curr.left
-            while curr is not None:
-                curr = curr.right
-            pred = curr
-        else:
-            pred = curr.parent
+        if node.left is not None:
+            node = node.left
+            while node.right is not None:
+                node = node.right
+            pred = node
 
         return pred
 
@@ -132,8 +121,19 @@ class BinarySearchTree(IBinarySearchTree):
         """
         Returns the in-order successor of node, or None if it does not exist.
         """
-        # TO DO ...
-        return None
+        if node == self._last() or node is None:
+            return None
+
+
+        succussion = node.parent
+
+        if node.right is not None:
+            node = node.right
+            while node.left is not None:
+                node = node.left
+            succussion = node
+
+        return succussion
 
     # --------------------------------------------------------------------------------------
     # Public methods, implementing the abstract-base-class interface.
@@ -168,6 +168,9 @@ class BinarySearchTree(IBinarySearchTree):
         return [key for key, _ in self.pairs()]
 
     def _move_to_key(self, node: _Node, key: object) -> _Node:
+        # TODO: TEMPORARY
+        if node == None:
+            node = self._root
 
         if node.left is None and (key < node.pair.key):
             return node
