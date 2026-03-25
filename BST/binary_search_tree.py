@@ -124,16 +124,15 @@ class BinarySearchTree(IBinarySearchTree):
         if node == self._last() or node is None:
             return None
 
-
-        succussion = node.parent
+        successor = node.parent
 
         if node.right is not None:
             node = node.right
             while node.left is not None:
                 node = node.left
-            succussion = node
+            successor = node
 
-        return succussion
+        return successor
 
     # --------------------------------------------------------------------------------------
     # Public methods, implementing the abstract-base-class interface.
