@@ -46,18 +46,30 @@ def pre_order(tree: BinaryTree, pos: Position, elems: list[object]):
     """
     Traversal of the binary tree, accumulating in a list a pre-order of its elements.
     """
-    if pos is None:
+    # if pos is None:
+    #     return
+
+    # elems.append(pos.handle.element)
+
+    # l_child = tree.left_child(pos)
+    # r_child = tree.right_child(pos)
+
+    # if l_child is not None:
+    #     pre_order(tree, l_child, elems)
+    # if r_child is not None:
+    #     pre_order(tree, r_child, elems)
+
+    root = tree.root().handle
+    sub_tree_pre_order(root, elems)
+    return elems
+
+
+def sub_tree_pre_order(node, elems):
+    if node is None:
         return
-
-    elems.append(pos.handle.element)
-
-    l_child = tree.left_child(pos)
-    r_child = tree.right_child(pos)
-
-    if l_child is not None:
-        pre_order(tree, l_child, elems)
-    if r_child is not None:
-        pre_order(tree, r_child, elems)
+    elems.append(node.element)
+    sub_tree_pre_order(node.left, elems)
+    sub_tree_pre_order(node.right, elems)
 
 
 def post_order(tree: BinaryTree, pos: Position, elems: list[object]):
@@ -84,14 +96,35 @@ def post_order(tree: BinaryTree, pos: Position, elems: list[object]):
     #     post_order(tree, root, elems)
     #     return
 
+    root = tree.root().handle
+    
+    sub_tree_post_order(root, elems)
+    return elems
+
+def sub_tree_post_order(node, elems):
+    if node is None:
+        return
+    
+    sub_tree_post_order(node.left, elems)
+    sub_tree_post_order(node.right, elems)
+    elems.append(node.element)
+
 
 def in_order(tree: BinaryTree, pos: Position, elems: list[object]):
     """
     Traversal of the binary tree, accumulating in a list a in-order of its elements.
     """
-    # To do ...
-    ...
+    root = tree.root().handle
+    run_in_order(root, elems)
+    return elems
 
+
+def run_in_order(node, result:list):
+    if node is None:
+        return None
+    run_in_order(node.left, result)
+    result.append(node.element)
+    run_in_order(node.right, result)
 
 def count(tree: BinaryTree, pos: Position, element: object) -> int:
     """
