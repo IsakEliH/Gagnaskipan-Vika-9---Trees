@@ -132,3 +132,10 @@ class BinaryTreeLinked(BinaryTree):
         self._validate_pos(pos)
         curr: BinaryTreeLinked._Node = pos.handle
         return curr.element
+
+
+# def height(node):
+#     if len(node.children) == 0:
+#         return 0
+
+#     return max([1+height(c) for c in node.children])
